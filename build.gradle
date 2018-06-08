@@ -1,0 +1,122 @@
+/**
+ *  Copyright (c) 2018 kolektif Contributors
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+// Gradle configuration
+// ~~~~~~
+buildscript {
+  apply from: 'version.gradle'
+
+  repositories {
+    jcenter()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "com.github.jengelman.gradle.plugins:shadow:${shadowVersion}"
+  }
+}
+
+plugins {
+  id 'scala'
+  id 'application'
+}
+
+// All projects configuration
+// ~~~~~~
+allprojects {
+  apply from: "${rootDir}/version.gradle"
+
+  group = 'com.hhandoko'
+  version = rootProject.file('VERSION.txt').text.trim()
+  mainClassName = 'io.vertx.core.Launcher'
+
+  apply plugin: 'com.github.johnrengelman.shadow'
+  apply plugin: 'scala'
+  apply plugin: 'application'
+
+  repositories {
+    jcenter()
+    mavenCentral()
+  }
+
+  dependencies {
+    compile "io.vertx:vertx-core:${vertxVersion}"
+    compile "io.vertx:vertx-unit:${vertxVersion}"
+    compile "io.vertx:${scala('vertx-web-scala')}:${vertxVersion}"
+    compile "org.scala-lang:scala-library:${scalaVersion}"
+    testCompile "junit:junit:${junitVersion}"
+    testCompile "org.scalatest:${scala('scalatest')}:${scalaTestVersion}"
+  }
+
+  // Allows individual unit test results output
+  test {
+    testLogging {
+      events 'passed', 'skipped', 'failed'
+    }
+  }
+}
+
+// Root project configuration
+// ~~~~~~
+def mainVerticleName = 'scala:com.hhandoko.kolektif.MainVerticle'
+def watchForChange = 'src/**/*'
+def doOnChange = './gradlew classes'
+
+shadowJar {
+  baseName = 'kolektif'
+  classifier = null
+  version = null
+
+  manifest {
+    attributes "Main-Verticle": mainVerticleName
+  }
+
+  mergeServiceFiles {
+    include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+  }
+}
+
+run {
+  args =
+    ['run'
+    , mainVerticleName
+    , "--launcher-class=${mainClassName}"
+    , "--redeploy=${watchForChange}"
+    , "--on-redeploy=${doOnChange}"
+    ]
+}
+
+wrapper {
+  gradleVersion = gradleWrapperVersion
+}
+
+// Scala compiler options
+// ~~~~~~
+tasks.withType(ScalaCompile) {
+  scalaCompileOptions.additionalParameters =
+    [ '-deprecation'              // Emit warning and location for usages of deprecated APIs
+    , '-feature'                  // Emit warning and location for usages of features that should be imported explicitly
+    , '-unchecked'                // Enable additional warnings where generated code depends on assumptions
+    , '-Xfatal-warnings'          // Fail the compilation if there are any warnings
+    , '-Xlint'                    // Enable recommended additional warnings
+    , '-Ypartial-unification'     // SI-2712 - cats rely on it for improved type inference
+    , '-Ywarn-adapted-args'       // Warn if an argument list is modified to match the receiver
+    , '-Ywarn-dead-code'          // Warn when dead code is identified
+    , '-Ywarn-inaccessible'       // Warn about inaccessible types in method signatures
+    , '-Ywarn-nullary-override'   // Warn when non-nullary overrides nullary, e.g. `def foo()` over `def foo`
+    , '-Ywarn-numeric-widen'      // Warn when numerics are widened
+    ]
+}
