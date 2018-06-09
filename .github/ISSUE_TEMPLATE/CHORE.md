@@ -1,6 +1,6 @@
 ---
 name: Chore
-about: Technical task to improve the development experience
+about: Technical tasks or maintenance activities to improve the development experience
 
 ---
 
