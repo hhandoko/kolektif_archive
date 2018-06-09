@@ -14,22 +14,31 @@
   */
 package com.hhandoko.kolektif
 
-import scala.concurrent.Future
+import scala.concurrent.Promise
 
-import io.vertx.lang.scala.ScalaVerticle
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 
-class MainVerticle
-  extends ScalaVerticle {
+@RunWith(classOf[JUnitRunner])
+class MainVerticleSpec
+  extends VerticleBaseSpec[MainVerticle] {
 
-  override def startFuture(): Future[_] = {
-    vertx
-      .createHttpServer()
-      .requestHandler { req =>
-        req
-          .response()
-          .putHeader("content-type", "text/plain")
-          .end("Hello from Vert.x")
-      }.listenFuture(8080)
+  "MainVerticle" should {
+
+    "return 'Hello from Vert.x' on '/'" in {
+      val promise = Promise[String]
+
+      vertx
+        .createHttpClient()
+        .getNow(8080, "127.0.0.1", "/", res => {
+            res.exceptionHandler(promise.failure)
+            res.bodyHandler { body => promise.success(body.toString) }
+        })
+
+      promise.future.map { res =>
+        res mustEqual "Hello from Vert.x"
+      }
+    }
   }
 
 }
