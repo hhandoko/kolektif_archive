@@ -14,11 +14,11 @@ Related tickets: #*<GitHub issue number>*
 ## Pull Request (PR) Checklist
 
 ### Documentation
-- [ ] Documentation in `README.md` updated
+- [ ] Update documentation in `README.md`
 
 ### Code Review
 - [ ] Self code review -- take another pass through the changes yourself
-- [ ] Completed all relevant `TODO`s, or call them out in the PR comments
+- [ ] Completed all relevant `TODO`s, or call them out in the PR comments or raise a separate chore
 
 ### Tests
 - [ ] All tests passes
