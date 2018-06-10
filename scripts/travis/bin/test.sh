@@ -1,5 +1,7 @@
+#!/bin/sh
+
 ###
-# File     : .editorconfig
+# File     : test.sh
 # License  :
 #   Copyright (c) 2018 kolektif Contributors
 #
@@ -14,29 +16,8 @@
 #   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
-#
-# Notes    :
-#   EditorConfig helps developers define and maintain consistent coding styles between different editors and IDEs.
-#   https://editorconfig.org/
 ###
 
-root = true
-
-[*]
-
-# Change these settings to your own preference
-indent_style = space
-indent_size = 2
-
-# We recommend you to keep these unchanged
-end_of_line = lf
-charset = utf-8
-trim_trailing_whitespace = true
-insert_final_newline = true
-
-[*.md]
-trim_trailing_whitespace = false
-
-[{package,bower}.json]
-indent_style = space
-indent_size = 2
+# Run the tests
+# ~~~~~~
+./gradlew test
