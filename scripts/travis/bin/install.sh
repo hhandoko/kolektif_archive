@@ -1,5 +1,7 @@
+#!/bin/sh
+
 ###
-# File     : .travis.yml
+# File     : install.sh
 # License  :
 #   Copyright (c) 2018 kolektif Contributors
 #
@@ -15,7 +17,19 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 ###
-language: java
-jdk: oraclejdk8
-install: ./scripts/travis/bin/install.sh
-script: ./scripts/travis/bin/test.sh
+
+# Use default Gradle binaries (no source)
+# ~~~~~~
+# `sed` is used rather than replacing the whole file as the file is
+# automatically updated every time the version changed.
+sed -i -e 's/-all.zip/-bin.zip/g' ./gradle/wrapper/gradle-wrapper.properties
+
+# Use CI-specific Gradle configuration
+# ~~~~~~
+cp -rf ./scripts/travis/gradle.properties ./gradle.properties
+
+# Run the minimal set of tasks to prepare the project for testing
+# ~~~~~~
+# Travis by default runs `assemble` which generates full distributable
+# artifacts (e.g. Javadocs).
+./gradlew clean testClasses

@@ -1,5 +1,7 @@
+#!/bin/sh
+
 ###
-# File     : .travis.yml
+# File     : test.sh
 # License  :
 #   Copyright (c) 2018 kolektif Contributors
 #
@@ -15,7 +17,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 ###
-language: java
-jdk: oraclejdk8
-install: ./scripts/travis/bin/install.sh
-script: ./scripts/travis/bin/test.sh
+
+# Run the tests
+# ~~~~~~
+./gradlew test

@@ -1,16 +1,22 @@
-/** Copyright (c) 2018 kolektif Contributors
+/** File     : VerticleBaseSpec.scala
+  * License  :
+  *   Copyright (c) 2018 kolektif Contributors
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  *   Licensed under the Apache License, Version 2.0 (the "License");
+  *   you may not use this file except in compliance with the License.
+  *   You may obtain a copy of the License at
   *
-  *         http://www.apache.org/licenses/LICENSE-2.0
+  *           http://www.apache.org/licenses/LICENSE-2.0
   *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  *   Unless required by applicable law or agreed to in writing, software
+  *   distributed under the License is distributed on an "AS IS" BASIS,
+  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  *   See the License for the specific language governing permissions and
+  *   limitations under the License.
+  *
+  * Notes    :
+  *   Based on the HttpVerticleSpec template found on Vert.x Scala g8 template.
+  *   https://github.com/vert-x3/vertx-scala.g8/blob/master/src/main/g8/src/test/scala/%24package%24/HttpVerticleSpec.scala
   */
 package com.hhandoko.kolektif
 
@@ -24,8 +30,6 @@ import io.vertx.lang.scala.{ScalaVerticle, VertxExecutionContext}
 import io.vertx.scala.core.{DeploymentOptions, Vertx}
 import org.scalatest.{AsyncWordSpec, BeforeAndAfter, MustMatchers}
 
-// NOTE: Based on the HttpVerticleSpec template found on Vert.x Scala g8 template on
-//       https://github.com/vert-x3/vertx-scala.g8/blob/master/src/main/g8/src/test/scala/%24package%24/HttpVerticleSpec.scala
 abstract class VerticleBaseSpec[A <: ScalaVerticle: TypeTag]
   extends AsyncWordSpec
     with MustMatchers
